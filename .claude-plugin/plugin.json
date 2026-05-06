@@ -1,0 +1,22 @@
+{
+  "name": "aeo-geo-analyzer",
+  "version": "0.1.0",
+  "description": "Audit website and blog content from an Answer Engine Optimization (AEO) and Generative Engine Optimization (GEO) perspective. Scores citation-worthiness, produces page-level edit feedback, and generates a weekly topic queue for ranking in ChatGPT, Perplexity, Claude, Gemini, and Google AI Overviews.",
+  "author": {
+    "name": "Aidan Duffy",
+    "url": "https://github.com/aidan269"
+  },
+  "homepage": "https://github.com/aidan269/aeo-geo-analyzer-plugin-",
+  "repository": "https://github.com/aidan269/aeo-geo-analyzer-plugin-",
+  "license": "MIT",
+  "keywords": [
+    "aeo",
+    "geo",
+    "ai-search",
+    "content",
+    "seo",
+    "llm-optimization",
+    "perplexity",
+    "chatgpt"
+  ]
+}

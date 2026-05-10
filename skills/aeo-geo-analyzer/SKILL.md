@@ -15,11 +15,15 @@ The whole value of this skill is **specificity**. Generic advice like "add more 
 
 ## Inputs
 
-Ask the user for one of:
-- A list of URLs (most common — paste, or read from a sitemap)
-- A single page to deep-dive
-- A topic or domain to plan around (no existing content yet)
-- A sitemap.xml or RSS feed
+Accept any of the following — the workflow branches on input type:
+
+- **URL or list of URLs** (most common — paste, or read from a sitemap)
+- **Raw pasted content** — a draft article, a section of copy, or an unpublished blog post. Treat the pasted text as the page body and skip the fetch step. This is the right mode for pre-publication review, where catching citation-worthiness issues before the page ships is far cheaper than fixing them after.
+- **A single page to deep-dive**
+- **A topic or domain to plan around** (no existing content yet)
+- **A sitemap.xml or RSS feed**
+
+For short-form social content (tweets, threads, LinkedIn posts), this skill is the wrong fit — the rubric assumes longform passages and will under-score short content. Use the `aeo-short-form` skill instead.
 
 Also ask, on the first run only:
 - Their domain and one-line positioning
@@ -32,9 +36,12 @@ Save these to `aeo-config.md` in the current working directory so future weekly 
 
 ### 1. Fetch and inventory
 
-Use WebFetch on each URL. For a sitemap, parse the XML and pick the 5–15 most strategically important or most recently updated pages for this week's audit. Do not try to score every page every week — the report becomes noise. If the user has hundreds of pages, prioritize: (a) anything published or updated in the last 14 days, (b) pages on the priority topic clusters, (c) pages already getting some traffic but no AI citations.
+Branch on input type:
 
-For audits of 20+ pages, fetch and score in parallel by spawning subagents — one per page or one per cluster. Each subagent returns a scored result; you aggregate.
+- **URL or sitemap:** Use WebFetch on each URL. For a sitemap, parse the XML and pick the 5–15 most strategically important or most recently updated pages for this week's audit. Do not try to score every page every week — the report becomes noise. If the user has hundreds of pages, prioritize: (a) anything published or updated in the last 14 days, (b) pages on the priority topic clusters, (c) pages already getting some traffic but no AI citations.
+- **Raw pasted content:** Skip fetching. Treat the pasted text as the page body. When scoring drafts, the Authority / E-E-A-T sub-score has limited signal (no page chrome, byline, or schema to inspect) — score it on *in-text* signals only (named expert quotes, citations to credentialed sources, named original research) and note this caveat in the scored output. Do not penalize a draft for missing page chrome that does not exist yet; flag it as a recommendation for when the page goes live.
+
+For audits of 20+ pages from URLs, fetch and score in parallel by spawning subagents — one per page or one per cluster. Each subagent returns a scored result; you aggregate.
 
 ### 2. Score each page
 

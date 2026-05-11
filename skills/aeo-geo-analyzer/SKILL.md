@@ -68,7 +68,15 @@ The user should be able to hand these edits to a writer or paste them into a doc
 
 See `references/citation-patterns.md` for the catalog of patterns LLMs reward and the anti-patterns they punish. Skim this before generating feedback — the patterns are how you find concrete edits rather than generic advice.
 
-### 4. Generate the weekly topic queue
+### 4. Generate word-level swaps
+
+Page-level rewrites (step 3) are big lifts. Word-level swaps are the cheapest possible edits — usually a single find-and-replace — and they affect every passage at once. Read `references/word-swaps.md` and surface 5–15 specific swaps actually present on the page, organized by category (hedges, vague intensifiers, dead verbs, unsourced attributions, filler nouns, time anchors, cause-effect weasels, brand-voice fluff).
+
+Quote the exact phrase the user wrote; do not invent weak phrases that are not on the page. If a category has zero hits, omit it from the output — do not pad with empty sections.
+
+Word swaps complement the page-level rewrites in step 3; they do not replace them. A page with three good paragraph rewrites *and* ten clean word swaps ships in a much stronger state than one with just the rewrites.
+
+### 5. Generate the weekly topic queue
 
 Use the methods in `references/topic-research.md` to propose 5–10 topics for the coming week, ranked by AI-search opportunity. Each topic entry includes:
 - Target user query (the actual phrase a user would type into ChatGPT or Perplexity)
@@ -76,7 +84,7 @@ Use the methods in `references/topic-research.md` to propose 5–10 topics for t
 - The angle the user's brand should take
 - A draft H1 and a draft 40-word TL;DR that would itself be citation-worthy
 
-### 5. Deliver the report
+### 6. Deliver the report
 
 Write the report to `aeo-weekly-YYYY-MM-DD.md` in the working directory, using the structure in `references/report-template.md`. Do not improvise the structure — the user reads these reports every week and consistency matters more than novelty.
 
@@ -90,5 +98,6 @@ Write the report to `aeo-weekly-YYYY-MM-DD.md` in the working directory, using t
 
 - `references/scoring-rubric.md` — the 0–100 scoring framework, with sub-scores
 - `references/citation-patterns.md` — what LLMs reward and punish, with examples
+- `references/word-swaps.md` — word-level alternatives for hedges, dead verbs, vague intensifiers, unsourced attributions, and other weak phrasings
 - `references/topic-research.md` — how to find query gaps and topic opportunities
 - `references/report-template.md` — the weekly report structure

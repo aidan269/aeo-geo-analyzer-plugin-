@@ -42,6 +42,24 @@ Save the report as `aeo-weekly-YYYY-MM-DD.md` in the working directory. Use this
 
 2. <repeat>
 
+**Word-level swaps (from `references/word-swaps.md`):**
+
+Grouped by category, only include categories with actual hits on this page.
+
+```
+### Hedges (N found)
+- "<exact phrase from page>"  →  "<stronger alternative, in this page's context>"
+- ...
+
+### Unsourced attributions (N found)
+- "<exact phrase>"  →  "<named source or drop>"
+
+### Time anchors (N found)
+- "<exact phrase>"  →  "<dated alternative>"
+
+### <other categories as present>
+```
+
 ---
 
 <repeat per page>

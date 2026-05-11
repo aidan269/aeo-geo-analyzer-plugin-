@@ -71,7 +71,15 @@ Always respect platform character limits when rewriting:
 
 If a rewrite exceeds the limit, propose a thread-split instead of a single post.
 
-### 4. Suggest thread restructuring (if applicable)
+### 4. Generate word-level swaps
+
+Read `references/word-swaps.md` and surface 3–8 specific swaps actually present in the content. The short-form catalog covers tease openers, unresolved pronouns, hedges, vague intensifiers, generic CTAs, time anchors, filler verbs, and hashtag/emoji noise.
+
+Quote the exact phrase the user wrote; do not invent weak phrases. For threads, note which post each swap belongs to. Skip categories with zero hits — do not pad with empty sections.
+
+In short-form, word swaps are often higher-leverage than full rewrites because character budgets are tight and a single weak word can dominate the post. A tweet with one tease opener swapped to a claim opener often gains 15+ rubric points without changing anything else.
+
+### 5. Suggest thread restructuring (if applicable)
 
 For draft threads, identify whether any post would gain by:
 - Being moved to position 1 (highest-citation slot)
@@ -81,7 +89,7 @@ For draft threads, identify whether any post would gain by:
 
 A common pattern: the strongest standalone claim is buried in tweet 4 of a 10-tweet thread. Move it to tweet 1.
 
-### 5. Deliver the report
+### 6. Deliver the report
 
 For a single post: a short scored summary + rewrites, no full report template.
 
@@ -93,6 +101,7 @@ For an account-level audit: read `references/account-audit-format.md` for the mu
 
 - `references/scoring-rubric.md` — the 0–100 short-form rubric with detailed sub-score criteria
 - `references/patterns.md` — reward patterns and anti-patterns specific to short-form
+- `references/word-swaps.md` — word-level alternatives tuned for short-form (tease openers, unresolved pronouns, hedges, generic CTAs)
 
 ## Traps to avoid
 

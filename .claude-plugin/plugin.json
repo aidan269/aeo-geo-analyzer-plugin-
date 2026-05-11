@@ -1,6 +1,6 @@
 {
   "name": "aeo-geo-analyzer",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Two skills that audit longform and short-form content from an Answer Engine Optimization (AEO) and Generative Engine Optimization (GEO) perspective. Scores citation-worthiness, produces page-level edit feedback, generates weekly topic queues for longform, and reviews tweets/threads/LinkedIn posts for AI-citation potential in ChatGPT, Perplexity, Claude, Gemini, and Google AI Overviews.",
   "author": {
     "name": "Aidan Duffy",

@@ -1,6 +1,6 @@
 ---
 name: aeo-geo-analyzer
-description: Audit website and blog content from an Answer Engine Optimization (AEO) and Generative Engine Optimization (GEO) perspective so it ranks better in AI search surfaces like ChatGPT, Perplexity, Claude, Gemini, and Google AI Overviews. Use this skill whenever the user mentions AEO, GEO, AI search optimization, citation-worthiness, getting cited by LLMs, ranking in AI search, content audits for LLM visibility, or wants weekly content recommendations, topic ideas, or page-level edit feedback to improve AI search performance. Also trigger when the user asks why their content is not getting cited by ChatGPT/Perplexity/Claude, how to make content LLM-friendly, how to plan a content calendar for AI search, or wants to score how citation-worthy a page is. Trigger even if the user does not say "AEO" or "GEO" by name — phrases like "rank in AI search," "get cited by ChatGPT," "show up in AI Overviews," or "LLM-friendly content" all qualify.
+description: Audit website and blog content from an Answer Engine Optimization (AEO) and Generative Engine Optimization (GEO) perspective so it ranks better in AI search surfaces like ChatGPT, Perplexity, Claude, Gemini, and Google AI Overviews. Includes a cybersecurity segment overlay with content-type classification (incident report, CVE explainer, threat-actor profile, runbook, advisory, post-mortem, research piece), persona detection (SOC analyst, CISO, IT ops, developer, executive), domain signal checklist (CVE / CVSS / CWE / ATT&CK / KEV / EPSS / IOCs / disclosure timeline), and cybersec-specific word swaps — used automatically on threat-intel and security content. Use this skill whenever the user mentions AEO, GEO, AI search optimization, citation-worthiness, getting cited by LLMs, ranking in AI search, content audits for LLM visibility, or wants weekly content recommendations, topic ideas, or page-level edit feedback to improve AI search performance. Also trigger when the user asks why their content is not getting cited by ChatGPT/Perplexity/Claude, how to make content LLM-friendly, how to plan a content calendar for AI search, wants to score how citation-worthy a page is, or wants to audit CVE writeups, incident reports, threat-actor profiles, vendor advisories, runbooks, or other cybersec / threat-intel content for AI search performance. Trigger even if the user does not say "AEO" or "GEO" by name — phrases like "rank in AI search," "get cited by ChatGPT," "show up in AI Overviews," "audit my CVE writeup," or "LLM-friendly content" all qualify.
 ---
 
 # AEO / GEO Content Analyzer
@@ -43,9 +43,21 @@ Branch on input type:
 
 For audits of 20+ pages from URLs, fetch and score in parallel by spawning subagents — one per page or one per cluster. Each subagent returns a scored result; you aggregate.
 
-### 2. Score each page
+### 2. Detect segment and load overlays
 
-Score against the rubric in `references/scoring-rubric.md`. The rubric produces a 0–100 citation-worthiness score with sub-scores for:
+Before scoring, check whether the page belongs to a specialized segment that requires a domain overlay. Domain overlays add segment-specific signals, content-type classification, and persona-aware recommendations on top of the base rubric — the difference between a generic AEO audit and a useful one for technical content.
+
+Available overlays:
+
+- **Cybersecurity** (`references/segments/cybersecurity/README.md`) — apply when the page mentions a CVE ID (regex `CVE-\d{4}-\d{4,7}`), covers a named breach / vulnerability / exploit / threat actor / malware / defensive technique, references an authoritative cybersec source (CISA, MITRE, NIST, NCSC, ENISA, NVD, KEV, EPSS, FIRST, or a named vendor security advisory), or comes from a recognized security publication. Always apply for ahackaday.news and Cantina-adjacent content.
+
+If a segment overlay applies, read its `README.md` first, then `content-types.md` to classify the page, then `signals.md` for the domain signal checklist. State the detected segment + content type + persona at the top of the per-page output so the user can correct you if wrong.
+
+If you cannot identify the content type with confidence, ask the user — do not guess.
+
+### 3. Score each page
+
+Score against the base rubric in `references/scoring-rubric.md`. The rubric produces a 0–100 citation-worthiness score with sub-scores for:
 - Direct answer up front (is the answer in the first 100 words?)
 - Statistics and evidence (named numbers, sources, primary data)
 - Structure (H2/H3 questions, lists, tables, FAQ blocks, schema markup)
@@ -55,7 +67,9 @@ Score against the rubric in `references/scoring-rubric.md`. The rubric produces 
 
 Read the rubric file before scoring — do not score from memory.
 
-### 3. Generate page-level feedback
+If a segment overlay applied in step 2, **also score the segment-specific sub-score (0–10)** defined for the detected content type in the overlay's `content-types.md`, and run the segment's signal checklist (`signals.md`). The signal checklist produces a present/partial/absent matrix; each absent high-weight signal becomes a specific recommendation in step 4.
+
+### 4. Generate page-level feedback
 
 For each page, produce 3–7 concrete edits. The format is non-negotiable:
 
@@ -68,15 +82,19 @@ The user should be able to hand these edits to a writer or paste them into a doc
 
 See `references/citation-patterns.md` for the catalog of patterns LLMs reward and the anti-patterns they punish. Skim this before generating feedback — the patterns are how you find concrete edits rather than generic advice.
 
-### 4. Generate word-level swaps
+If a segment overlay applied, include signal-gap recommendations alongside the generic edits — each absent high-weight signal from the checklist becomes a one-sentence recommendation with the exact text to add (e.g., "add the patched build number `X.Y.Z` and release date to the Key Facts callout").
+
+### 5. Generate word-level swaps
 
 Page-level rewrites (step 3) are big lifts. Word-level swaps are the cheapest possible edits — usually a single find-and-replace — and they affect every passage at once. Read `references/word-swaps.md` and surface 5–15 specific swaps actually present on the page, organized by category (hedges, vague intensifiers, dead verbs, unsourced attributions, filler nouns, time anchors, cause-effect weasels, brand-voice fluff).
 
 Quote the exact phrase the user wrote; do not invent weak phrases that are not on the page. If a category has zero hits, omit it from the output — do not pad with empty sections.
 
-Word swaps complement the page-level rewrites in step 3; they do not replace them. A page with three good paragraph rewrites *and* ten clean word swaps ships in a much stronger state than one with just the rewrites.
+Word swaps complement the page-level rewrites in step 4; they do not replace them. A page with three good paragraph rewrites *and* ten clean word swaps ships in a much stronger state than one with just the rewrites.
 
-### 5. Generate the weekly topic queue
+If a segment overlay applied, also run the overlay's `word-swaps.md` for domain-specific swaps (e.g., "hackers" → named actor, "a vulnerability" → CVE ID with CVSS, vague impact → specific impact). Surface these as additional categories alongside the generic word swaps.
+
+### 6. Generate the weekly topic queue
 
 Use the methods in `references/topic-research.md` to propose 5–10 topics for the coming week, ranked by AI-search opportunity. Each topic entry includes:
 - Target user query (the actual phrase a user would type into ChatGPT or Perplexity)
@@ -84,7 +102,7 @@ Use the methods in `references/topic-research.md` to propose 5–10 topics for t
 - The angle the user's brand should take
 - A draft H1 and a draft 40-word TL;DR that would itself be citation-worthy
 
-### 6. Deliver the report
+### 7. Deliver the report
 
 Write the report to `aeo-weekly-YYYY-MM-DD.md` in the working directory, using the structure in `references/report-template.md`. Do not improvise the structure — the user reads these reports every week and consistency matters more than novelty.
 
@@ -101,3 +119,7 @@ Write the report to `aeo-weekly-YYYY-MM-DD.md` in the working directory, using t
 - `references/word-swaps.md` — word-level alternatives for hedges, dead verbs, vague intensifiers, unsourced attributions, and other weak phrasings
 - `references/topic-research.md` — how to find query gaps and topic opportunities
 - `references/report-template.md` — the weekly report structure
+
+## Segment overlays (load only when relevant)
+
+- `references/segments/cybersecurity/` — cybersecurity overlay: content-type taxonomy (incident report / CVE explainer / threat-actor profile / TTP writeup / defensive guide / runbook / advisory / post-mortem / news digest / research piece), persona taxonomy (SOC analyst / CISO / IT ops / developer / executive / general reader / compliance), domain signal checklist (CVE / CVSS / CWE / ATT&CK / KEV / EPSS / IOCs / disclosure timeline / detection rules), and cybersec-specific word swaps. Required for ahackaday.news, Cantina-adjacent content, and any page mentioning CVEs or named threat actors. See `references/segments/cybersecurity/README.md` to start.

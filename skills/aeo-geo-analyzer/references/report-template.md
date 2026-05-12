@@ -33,6 +33,30 @@ Save the report as `aeo-weekly-YYYY-MM-DD.md` in the working directory. Use this
 - Freshness: X/15
 - Topical depth: X/15
 
+**Segment overlay** *(only when an overlay applied — e.g., cybersecurity)*
+- **Segment:** <detected content type, e.g., "Incident report" or "CVE explainer"> — confidence: high / medium / low
+- **Persona:** <primary persona> (secondary: <if relevant>)
+- **Segment sub-score:** X/10  — <one-line rationale from `references/segments/<segment>/content-types.md`>
+- **Signal coverage:** brief checklist, marking each expected signal ✓ / ~ / ✗
+
+```
+Identifiers
+- CVE ID:                    ✓ / ~ / ✗  <value or note>
+- CVSS score + vector:       ✓ / ~ / ✗  <value or note>
+- MITRE ATT&CK technique:    ✓ / ~ / ✗
+Exploitation context
+- CISA KEV status:           ✓ / ~ / ✗
+- Exploitation-in-wild:      ✓ / ~ / ✗
+Scope
+- Affected versions:         ✓ / ~ / ✗
+- Patched version:           ✓ / ~ / ✗
+Timeline
+- Disclosure timeline:       ✓ / ~ / ✗
+References
+- Authoritative source link: ✓ / ~ / ✗
+```
+- **Signal gaps to fill:** comma-separated list of absent / partial signals; each becomes a specific recommended edit below.
+
 **Recommended edits (3–7):**
 
 1. **Issue:** <one sentence>
